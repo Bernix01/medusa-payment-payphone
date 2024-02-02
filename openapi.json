@@ -1,0 +1,2004 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "PayPhone API",
+    "version" : "v1"
+  },
+  "servers" : [ {
+    "url" : "https://pay.payphonetodoesposible.com/"
+  } ],
+  "paths" : {
+    "/api/Annul/client" : {
+      "post" : {
+        "tags" : [ "Annul" ],
+        "summary" : "POST: Request a cancellation for the transaction with specified client transaction id",
+        "operationId" : "Annul_SetByClientId",
+        "requestBody" : {
+          "description" : "<seealso cref=\"T:PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel\" />",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "text/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationSetModel"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationSetModel"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationSetModel"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationSetModel"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name" : "model"
+      }
+    },
+    "/api/Annul/client/{clientId}" : {
+      "get" : {
+        "tags" : [ "Annul" ],
+        "summary" : "GET: the annul by client transaction id",
+        "operationId" : "Annul_GetByClientId",
+        "parameters" : [ {
+          "name" : "clientId",
+          "in" : "path",
+          "description" : "Client transaction id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationModel"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationModel"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationModel"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Annul" : {
+      "post" : {
+        "tags" : [ "Annul" ],
+        "summary" : "POST: Request a cancellation for the transaction with specified id",
+        "operationId" : "Annul_Set",
+        "requestBody" : {
+          "description" : "<seealso cref=\"T:PayPhone.PaymentButton.Models.CancellationSetRequestModel\" />",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "text/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationSetModel"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationSetModel"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationSetModel"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationSetModel"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name" : "model"
+      }
+    },
+    "/api/Annul/{id}" : {
+      "get" : {
+        "tags" : [ "Annul" ],
+        "summary" : "GET: the annul by his id",
+        "operationId" : "Annul_Get",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Annul id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationModel"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationModel"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationModel"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.CancellationModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/button/Prepare" : {
+      "post" : {
+        "tags" : [ "Button" ],
+        "summary" : "POST: Prepare the transaction for consume later by payment button",
+        "operationId" : "Button_Prepare",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.PrepareSaleRequestModel"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.PrepareSaleRequestModel"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.PrepareSaleRequestModel"
+              }
+            },
+            "text/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.PrepareSaleRequestModel"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.PrepareSaleRequestModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.PrepareSaleModel"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.PrepareSaleModel"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.PrepareSaleModel"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.PrepareSaleModel"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name" : "model"
+      }
+    },
+    "/api/button/V2/Confirm" : {
+      "post" : {
+        "tags" : [ "Button" ],
+        "summary" : "Post: Confirm the transaction receive from payment button",
+        "operationId" : "Button_ConfirmV2",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.ConfirmSaleRequestModel"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.ConfirmSaleRequestModel"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.ConfirmSaleRequestModel"
+              }
+            },
+            "text/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.ConfirmSaleRequestModel"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.ConfirmSaleRequestModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModelB"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModelB"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModelB"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModelB"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name" : "model"
+      }
+    },
+    "/api/Cancel/client" : {
+      "post" : {
+        "tags" : [ "Cancel" ],
+        "summary" : "POST: Request cancel transaction by client transaction id",
+        "operationId" : "Cancel_SetByClient",
+        "requestBody" : {
+          "description" : "<seealso cref=\"T:PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel\" />",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "text/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name" : "model"
+      }
+    },
+    "/api/Cancel" : {
+      "post" : {
+        "tags" : [ "Cancel" ],
+        "summary" : "POST: Request cancel transaction",
+        "operationId" : "Cancel_Set",
+        "requestBody" : {
+          "description" : "<seealso cref=\"T:PayPhone.PaymentButton.Models.CancellationSetRequestModel\" />",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "text/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name" : "model"
+      }
+    },
+    "/api/Links" : {
+      "post" : {
+        "tags" : [ "Links" ],
+        "summary" : "Request a pay link with specific amount",
+        "operationId" : "Links_Post",
+        "requestBody" : {
+          "description" : "Parameters for request a new link",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.LinkViewModel"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.LinkViewModel"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.LinkViewModel"
+              }
+            },
+            "text/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.LinkViewModel"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.LinkViewModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name" : "model"
+      }
+    },
+    "/api/Regions" : {
+      "get" : {
+        "tags" : [ "Regions" ],
+        "summary" : "GET: available regions",
+        "operationId" : "Regions_Get",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.RegionModel"
+                  }
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.RegionModel"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.RegionModel"
+                  }
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.RegionModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Reverse/Client" : {
+      "post" : {
+        "tags" : [ "Reverse" ],
+        "summary" : "POST: Reverse transaction by client transaction id",
+        "operationId" : "Reverse_SetByClientId",
+        "requestBody" : {
+          "description" : "<seealso cref=\"T:PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel\" />",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "text/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name" : "model"
+      }
+    },
+    "/api/Reverse" : {
+      "post" : {
+        "tags" : [ "Reverse" ],
+        "summary" : "POST: Reverse transaction",
+        "operationId" : "Reverse_Set",
+        "requestBody" : {
+          "description" : "<seealso cref=\"T:PayPhone.PaymentButton.Models.CancellationSetRequestModel\" />",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "text/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.PaymentButton.Models.CancellationSetRequestModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name" : "model"
+      }
+    },
+    "/api/Sale/client/{clientId}" : {
+      "get" : {
+        "tags" : [ "Sale" ],
+        "summary" : "Get transaction by client transaction id",
+        "operationId" : "Sale_GetByClient",
+        "parameters" : [ {
+          "name" : "clientId",
+          "in" : "path",
+          "description" : "Client transaction id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModel"
+                  }
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModel"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModel"
+                  }
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Sale" : {
+      "post" : {
+        "tags" : [ "Sale" ],
+        "summary" : "Create transaction and send notification to customer",
+        "operationId" : "Sale_Set",
+        "requestBody" : {
+          "description" : "<seealso cref=\"T:PayPhone.Button.Business.ViewModels.SaleRequestModel\" />",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.Button.Business.ViewModels.SaleRequestModel"
+              }
+            },
+            "text/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.Button.Business.ViewModels.SaleRequestModel"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.Button.Business.ViewModels.SaleRequestModel"
+              }
+            },
+            "text/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.Button.Business.ViewModels.SaleRequestModel"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PayPhone.Button.Business.ViewModels.SaleRequestModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleModel"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleModel"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleModel"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleModel"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name" : "model"
+      }
+    },
+    "/api/Sale/{id}" : {
+      "get" : {
+        "tags" : [ "Sale" ],
+        "summary" : "Get transaction by id",
+        "operationId" : "Sale_Get",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Transaction identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModel"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModel"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModel"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.SaleGetModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/{number}/region/{prefix}" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "Get user by phone number",
+        "operationId" : "Users_Get",
+        "parameters" : [ {
+          "name" : "number",
+          "in" : "path",
+          "description" : "Phone number",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "prefix",
+          "in" : "path",
+          "description" : "Country code prefix",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.UserModel"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.UserModel"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.UserModel"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.UserModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/nickname/{number}/region/{prefix}" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "Get user by nickname",
+        "operationId" : "Users_GetByNickname",
+        "parameters" : [ {
+          "name" : "number",
+          "in" : "path",
+          "description" : "Nickname",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "prefix",
+          "in" : "path",
+          "description" : "Country phone prefix",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.UserModel"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.UserModel"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.UserModel"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.UserModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/check/{number}/region/{prefix}" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "Check active users",
+        "operationId" : "Users_CheckUser",
+        "parameters" : [ {
+          "name" : "number",
+          "in" : "path",
+          "description" : "Phone number",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "prefix",
+          "in" : "path",
+          "description" : "Country code prefix",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "text/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              },
+              "text/xml" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel" : {
+        "required" : [ "clientId" ],
+        "type" : "object",
+        "properties" : {
+          "clientId" : {
+            "type" : "string",
+            "description" : "Client transaction id"
+          }
+        },
+        "description" : ""
+      },
+      "PayPhone.Button.Business.Models.CancellationSetModel" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Annul id for get transaction",
+            "format" : "int64"
+          }
+        },
+        "description" : "Model for cancellation set"
+      },
+      "PayPhone.Button.Business.Models.CancellationModel" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Cancellation identifier",
+            "format" : "int64"
+          },
+          "statusCode" : {
+            "type" : "integer",
+            "description" : "Status code of cancellation",
+            "format" : "int32"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "Literal status of cancellation"
+          },
+          "clientTransactionId" : {
+            "type" : "string",
+            "description" : "Client transaction id"
+          },
+          "sale" : {
+            "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.Sale"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "Message for this annul"
+          }
+        },
+        "description" : "Cancellation model"
+      },
+      "PayPhone.Button.Business.Models.Sale" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Canceled sale id",
+            "format" : "int64"
+          },
+          "statusCode" : {
+            "type" : "integer",
+            "description" : "Canceled sale status code",
+            "format" : "int32"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "Canceled sale literal status"
+          },
+          "clientTransactionId" : {
+            "type" : "string",
+            "description" : "Client transaction id"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "Message for the cancelled transaction"
+          }
+        },
+        "description" : "Details of canceled sale"
+      },
+      "PayPhone.PaymentButton.Models.CancellationSetRequestModel" : {
+        "required" : [ "id" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "Transaction id of sale to annul",
+            "format" : "int32"
+          }
+        },
+        "description" : "Request annul model"
+      },
+      "PayPhone.Button.Business.Models.PrepareSaleRequestModel" : {
+        "required" : [ "amount", "clientTransactionId", "responseUrl" ],
+        "type" : "object",
+        "properties" : {
+          "responseUrl" : {
+            "type" : "string",
+            "description" : "Response url for this transaction"
+          },
+          "transactionSummaryUrl" : {
+            "type" : "string"
+          },
+          "timeZone" : {
+            "maximum" : 14,
+            "minimum" : -12,
+            "type" : "integer",
+            "description" : "",
+            "format" : "int32"
+          },
+          "lat" : {
+            "type" : "string",
+            "description" : "Store Latitude"
+          },
+          "lng" : {
+            "type" : "string",
+            "description" : "Store longitude"
+          },
+          "lang" : {
+            "type" : "string",
+            "description" : "Language for this transaction"
+          },
+          "reference" : {
+            "type" : "string",
+            "description" : "Reference for this transaction"
+          },
+          "phoneNumber" : {
+            "type" : "string",
+            "description" : "User Phone number (optional)"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "User email (optional)"
+          },
+          "optionalParameter" : {
+            "type" : "string",
+            "description" : "Parameter opcional No 3 (Optional)"
+          },
+          "documentId" : {
+            "type" : "string",
+            "description" : ""
+          },
+          "cancellationUrl" : {
+            "type" : "string",
+            "description" : "Url execute when user click in cancel payment before complete the payment process"
+          },
+          "amount" : {
+            "maximum" : 99999999,
+            "minimum" : 1,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "amountWithTax" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "amountWithoutTax" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "manualTax" : {
+            "type" : "boolean"
+          },
+          "tax" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "service" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "tip" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "clientTransactionId" : {
+            "type" : "string"
+          },
+          "storeId" : {
+            "type" : "string"
+          },
+          "terminalId" : {
+            "type" : "string"
+          },
+          "currency" : {
+            "type" : "string"
+          },
+          "order" : {
+            "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.Order"
+          }
+        },
+        "description" : "Model for accept the new sale request"
+      },
+      "PayPhone.Button.Business.Models.Order" : {
+        "type" : "object",
+        "properties" : {
+          "billTo" : {
+            "$ref" : "#/components/schemas/PayPhone.ISO._8583.Models.PayPhoneBillTo"
+          },
+          "lineItems" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.LineItem"
+            }
+          }
+        }
+      },
+      "PayPhone.ISO._8583.Models.PayPhoneBillTo" : {
+        "type" : "object",
+        "properties" : {
+          "billToId" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "address1" : {
+            "type" : "string"
+          },
+          "address2" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "string"
+          },
+          "state" : {
+            "type" : "string"
+          },
+          "locality" : {
+            "type" : "string"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "postalCode" : {
+            "type" : "string"
+          },
+          "customerId" : {
+            "type" : "string"
+          },
+          "ipAddress" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PayPhone.Button.Business.Models.LineItem" : {
+        "type" : "object",
+        "properties" : {
+          "productName" : {
+            "type" : "string"
+          },
+          "unitPrice" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "quantity" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "totalAmount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "taxAmount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "productSKU" : {
+            "type" : "string"
+          },
+          "productDescription" : {
+            "type" : "string"
+          },
+          "shippingDestinationTypes" : {
+            "type" : "string"
+          },
+          "passenger" : {
+            "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.Passenger"
+          }
+        }
+      },
+      "PayPhone.Button.Business.Models.Passenger" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "phone" : {
+            "type" : "string"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "nationality" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PayPhone.Button.Business.Models.PrepareSaleModel" : {
+        "type" : "object",
+        "properties" : {
+          "paymentId" : {
+            "type" : "string",
+            "description" : "Payment id generate"
+          },
+          "payWithPayPhone" : {
+            "type" : "string",
+            "description" : "Url for redirect and pay with PayPhone"
+          },
+          "payWithCard" : {
+            "type" : "string",
+            "description" : "Url for redirect to PayPhone and pay only with your credit card"
+          },
+          "payWithPaymentCode" : {
+            "type" : "string"
+          }
+        },
+        "description" : ""
+      },
+      "PayPhone.PaymentButton.Models.ConfirmSaleRequestModel" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Gets or sets the identifier.",
+            "format" : "int64"
+          },
+          "clientTxId" : {
+            "type" : "string",
+            "description" : "Gets or sets the client tx identifier."
+          }
+        },
+        "description" : ""
+      },
+      "PayPhone.Button.Business.Models.SaleGetModelB" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string"
+          },
+          "cardType" : {
+            "type" : "string"
+          },
+          "clientUserId" : {
+            "type" : "string"
+          },
+          "processor" : {
+            "type" : "string"
+          },
+          "bin" : {
+            "type" : "string"
+          },
+          "lastDigits" : {
+            "type" : "string"
+          },
+          "deferredCode" : {
+            "type" : "string"
+          },
+          "deferredMessage" : {
+            "type" : "string"
+          },
+          "deferred" : {
+            "type" : "boolean"
+          },
+          "cardBrandCode" : {
+            "type" : "string"
+          },
+          "cardBrand" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "clientTransactionId" : {
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "statusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "transactionStatus" : {
+            "type" : "string"
+          },
+          "authorizationCode" : {
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "messageCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "transactionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "document" : {
+            "type" : "string"
+          },
+          "taxes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.TaxModel"
+            }
+          },
+          "currency" : {
+            "type" : "string"
+          },
+          "optionalParameter1" : {
+            "type" : "string"
+          },
+          "optionalParameter2" : {
+            "type" : "string"
+          },
+          "optionalParameter3" : {
+            "type" : "string"
+          },
+          "optionalParameter4" : {
+            "type" : "string"
+          },
+          "storeName" : {
+            "type" : "string"
+          },
+          "date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "regionIso" : {
+            "type" : "string"
+          },
+          "transactionType" : {
+            "type" : "string"
+          },
+          "recap" : {
+            "type" : "string"
+          },
+          "reference" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PayPhone.Button.Business.Models.TaxModel" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "Tax name"
+          },
+          "amount" : {
+            "type" : "integer",
+            "description" : "Tax amount charged the sum of value and tax field",
+            "format" : "int32"
+          },
+          "value" : {
+            "type" : "integer",
+            "description" : "Tax value",
+            "format" : "int32"
+          },
+          "tax" : {
+            "type" : "integer",
+            "description" : "Tax apply for current tax",
+            "format" : "int32"
+          }
+        },
+        "description" : ""
+      },
+      "PayPhone.PaymentButton.Models.LinkViewModel" : {
+        "required" : [ "amount", "clientTransactionId", "currency" ],
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "type" : "integer",
+            "description" : "Transaction amount",
+            "format" : "int32"
+          },
+          "tax" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "description" : "Transaction tax",
+            "format" : "int32"
+          },
+          "amountWithTax" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "description" : "Transaction amount with tax",
+            "format" : "int32"
+          },
+          "amountWithoutTax" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "description" : "Trasnaction amount without tax",
+            "format" : "int32"
+          },
+          "service" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "description" : "Service amount",
+            "format" : "int32"
+          },
+          "tip" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "description" : "Tip amount",
+            "format" : "int32"
+          },
+          "currency" : {
+            "type" : "string",
+            "description" : "Currency to charge in ISO 4217 (USD)"
+          },
+          "reference" : {
+            "type" : "string",
+            "description" : "Reference describing the transaction MAX(50 characters)"
+          },
+          "clientTransactionId" : {
+            "type" : "string",
+            "description" : "Transaction identifier Max(50)"
+          },
+          "storeId" : {
+            "type" : "string",
+            "description" : "Store identifier. It can be found in the developer's console"
+          },
+          "additionalData" : {
+            "type" : "string",
+            "description" : "(Optional) Additional parameters, accept a json"
+          },
+          "oneTime" : {
+            "type" : "boolean",
+            "description" : "The link only can pay one time, the pay must be approved"
+          },
+          "expireIn" : {
+            "type" : "integer",
+            "description" : "When the link is no longer available in hours",
+            "format" : "int32"
+          },
+          "isAmountEditable" : {
+            "type" : "boolean",
+            "description" : "Si aplica monto editable"
+          },
+          "isMassive" : {
+            "type" : "boolean",
+            "description" : "Si es masivo o no"
+          }
+        }
+      },
+      "PayPhone.Button.Business.Models.RegionModel" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "Region name"
+          },
+          "prefixNumber" : {
+            "type" : "integer",
+            "description" : "Phone region prefix number",
+            "format" : "int32"
+          },
+          "iso" : {
+            "type" : "string",
+            "description" : "ISO code like \"EC\""
+          }
+        },
+        "description" : ""
+      },
+      "PayPhone.Button.Business.Models.SaleGetModel" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "description" : "Customer email"
+          },
+          "cardType" : {
+            "type" : "string",
+            "description" : "Card type"
+          },
+          "clientUserId" : {
+            "type" : "string",
+            "description" : "External user identifier"
+          },
+          "processor" : {
+            "type" : "string",
+            "description" : "Processor that served the request"
+          },
+          "bin" : {
+            "type" : "string",
+            "description" : "Card bin"
+          },
+          "lastDigits" : {
+            "type" : "string",
+            "description" : "Últimos dígitos de la tarjeta"
+          },
+          "deferredCode" : {
+            "type" : "string",
+            "description" : "Deferred code"
+          },
+          "deferredMessage" : {
+            "type" : "string",
+            "description" : "Deferred message"
+          },
+          "deferred" : {
+            "type" : "boolean",
+            "description" : "Flag that indicate if the payment was deferred or not"
+          },
+          "cardBrandCode" : {
+            "type" : "string",
+            "description" : "Card brand code Example (Visa 50)"
+          },
+          "cardBrand" : {
+            "type" : "string",
+            "description" : "Card brand"
+          },
+          "amount" : {
+            "type" : "integer",
+            "description" : "Amount charged (Number)",
+            "format" : "int32"
+          },
+          "clientTransactionId" : {
+            "type" : "string",
+            "description" : "Client transaction id"
+          },
+          "phoneNumber" : {
+            "type" : "string",
+            "description" : "Customer phone number"
+          },
+          "statusCode" : {
+            "type" : "integer",
+            "description" : "Transaction status code Example(1)",
+            "format" : "int32"
+          },
+          "transactionStatus" : {
+            "type" : "string",
+            "description" : "Transaction status Example(Canceled)"
+          },
+          "authorizationCode" : {
+            "type" : "string",
+            "description" : "Authorization code emiting by bank, this field have value is transaction status was approved"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "Message for error"
+          },
+          "messageCode" : {
+            "type" : "integer",
+            "description" : "Message code for the reason why transaction not approved",
+            "format" : "int32"
+          },
+          "transactionId" : {
+            "type" : "integer",
+            "description" : "PayPhone transaction id",
+            "format" : "int64"
+          },
+          "document" : {
+            "type" : "string",
+            "description" : "Customer Document id"
+          },
+          "taxes" : {
+            "type" : "array",
+            "description" : "Taxes apply to current transaction",
+            "items" : {
+              "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.TaxModel"
+            }
+          },
+          "currency" : {
+            "type" : "string",
+            "description" : "ISO code A of transaction currency"
+          },
+          "optionalParameter1" : {
+            "type" : "string",
+            "description" : "Optional parameter 1"
+          },
+          "optionalParameter2" : {
+            "type" : "string",
+            "description" : "Optional parameter 2"
+          },
+          "optionalParameter3" : {
+            "type" : "string",
+            "description" : "Optional parameter 3"
+          },
+          "optionalParameter4" : {
+            "type" : "string",
+            "description" : "Optional parameter 4"
+          },
+          "storeName" : {
+            "type" : "string",
+            "description" : "Store name"
+          },
+          "date" : {
+            "type" : "string",
+            "description" : "Fecha en la que se realizo la transacción",
+            "format" : "date-time"
+          },
+          "regionIso" : {
+            "type" : "string",
+            "description" : "ISO code de la region de la tienda que recibió el pago"
+          },
+          "transactionType" : {
+            "type" : "string"
+          },
+          "recap" : {
+            "type" : "string"
+          },
+          "reference" : {
+            "type" : "string"
+          },
+          "canBypassRedirection" : {
+            "type" : "boolean"
+          }
+        },
+        "description" : "Sale get model"
+      },
+      "PayPhone.Button.Business.ViewModels.SaleRequestModel" : {
+        "required" : [ "amount", "clientTransactionId", "countryCode" ],
+        "type" : "object",
+        "properties" : {
+          "nickName" : {
+            "type" : "string",
+            "description" : "The user nickname optional if ChargeByNickName is false"
+          },
+          "chargeByNickName" : {
+            "type" : "boolean",
+            "description" : "If true the user find by nickname. Note the nickname in this case is required"
+          },
+          "phoneNumber" : {
+            "type" : "string",
+            "description" : "User phone number optional if ChargeByNickName is true"
+          },
+          "countryCode" : {
+            "type" : "string",
+            "description" : "phone country code"
+          },
+          "timeZone" : {
+            "maximum" : 14,
+            "minimum" : -12,
+            "type" : "integer",
+            "description" : "Store time zone",
+            "format" : "int32"
+          },
+          "lat" : {
+            "type" : "string",
+            "description" : "Store Latitude"
+          },
+          "lng" : {
+            "type" : "string",
+            "description" : "Store longitude"
+          },
+          "clientUserId" : {
+            "type" : "string",
+            "description" : "(Optional) Identifier of the user generated in the client application"
+          },
+          "reference" : {
+            "type" : "string",
+            "description" : "(Optional) Field to send a reference of your purchase"
+          },
+          "optionalParameter1" : {
+            "type" : "string",
+            "description" : "Optional parameter 1"
+          },
+          "optionalParameter2" : {
+            "type" : "string",
+            "description" : "Optional parameter 2"
+          },
+          "optionalParameter3" : {
+            "type" : "string",
+            "description" : "Optional parameter 3"
+          },
+          "deferredType" : {
+            "type" : "string",
+            "description" : "(Optional) Deferred type example CF02010900"
+          },
+          "responseUrl" : {
+            "type" : "string",
+            "description" : "Response Url where our server send the payment result"
+          },
+          "maxiDolar" : {
+            "type" : "boolean"
+          },
+          "amount" : {
+            "maximum" : 99999999,
+            "minimum" : 1,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "amountWithTax" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "amountWithoutTax" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "manualTax" : {
+            "type" : "boolean"
+          },
+          "tax" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "service" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "tip" : {
+            "maximum" : 99999999,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "clientTransactionId" : {
+            "type" : "string"
+          },
+          "storeId" : {
+            "type" : "string"
+          },
+          "terminalId" : {
+            "type" : "string"
+          },
+          "currency" : {
+            "type" : "string"
+          },
+          "order" : {
+            "$ref" : "#/components/schemas/PayPhone.Button.Business.Models.Order"
+          }
+        },
+        "description" : ""
+      },
+      "PayPhone.Button.Business.Models.SaleModel" : {
+        "type" : "object",
+        "properties" : {
+          "transactionId" : {
+            "type" : "integer",
+            "description" : "Identifier for current created transaction",
+            "format" : "int64"
+          }
+        },
+        "description" : "Sale model to response"
+      },
+      "PayPhone.Button.Business.Models.UserModel" : {
+        "type" : "object",
+        "properties" : {
+          "documentId" : {
+            "type" : "string",
+            "description" : "User Document id"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "User name"
+          },
+          "lastName" : {
+            "type" : "string",
+            "description" : "User last name"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "User email"
+          },
+          "phoneNumbers" : {
+            "type" : "array",
+            "description" : "User phone numbers",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "description" : ""
+      }
+    },
+    "securitySchemes" : {
+      "Authorization" : {
+        "type" : "apiKey",
+        "description" : "API Key Authorization",
+        "name" : "Authorization",
+        "in" : "header"
+      }
+    }
+  },
+  "x-original-swagger-version" : "2.0"
+}
