@@ -15,6 +15,7 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
   protected readonly logger: Logger;
   protected readonly apiKey: string;
   protected readonly storeId: string;
+  protected readonly cartService: CartService;
 
   static identifier = "payphone";
 
@@ -23,12 +24,19 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
     this.logger = container.logger;
     this.apiKey = options.apiKey;
     this.storeId = options.storeId;
+    this.cartService = container.cartService;
   }
 
   async initiatePayment(
     context: PaymentProcessorContext
   ): Promise<PaymentProcessorError | PaymentProcessorSessionResponse> {
-    if (!context.customer?.phone) {
+    const cartId = context.resource_id;
+    const cart = await this.cartService.retrieve(cartId, {
+      relations: ["customer"],
+    });
+
+    if (!cart.billing_address.phone && !context.customer?.phone) {
+      this.logger.error("No phone number provided", context);
       return {
         error: "No se ha provisto un número de teléfono",
         code: "MISSING_PHONE_NUMBER",
@@ -41,7 +49,7 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
       session_data: {
         intent: "sale",
         amount: context.amount,
-        phone: context.customer.phone,
+        phone: context.customer.phone || cart.billing_address.phone,
         reference: context.resource_id,
       },
       update_requests: {
