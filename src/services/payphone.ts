@@ -1,32 +1,28 @@
 import {
   AbstractPaymentProcessor,
+  CartService,
   Logger,
   PaymentProcessorContext,
   PaymentProcessorError,
   PaymentProcessorSessionResponse,
   PaymentSessionStatus,
 } from "@medusajs/medusa";
-import {
-  CancelApi,
-  CancelApiApiKeys,
-  SaleApi,
-  SaleApiApiKeys,
-} from "src/lib/payphone";
+import { CancelApi, ReverseApi, SaleApi } from "../lib/payphone/apis";
+import { Configuration } from "../lib/payphone/runtime";
+import { MedusaError } from "medusa-core-utils";
 
-class PayphonePaymentProcessor extends AbstractPaymentProcessor {
-  logger: Logger;
-  apiKey: string;
-  storeId: string;
+class PayphonePaymentService extends AbstractPaymentProcessor {
+  protected readonly logger: Logger;
+  protected readonly apiKey: string;
+  protected readonly storeId: string;
+
+  static identifier = "payphone";
 
   constructor(container, options) {
-    super(container);
+    super(container, options);
     this.logger = container.logger;
     this.apiKey = options.apiKey;
     this.storeId = options.storeId;
-  }
-
-  getIdentifier(): string {
-    return "payphone";
   }
 
   async initiatePayment(
@@ -46,7 +42,7 @@ class PayphonePaymentProcessor extends AbstractPaymentProcessor {
         intent: "sale",
         amount: context.amount,
         phone: context.customer.phone,
-        reference: ``,
+        reference: context.resource_id,
       },
       update_requests: {
         customer_metadata: {
@@ -62,18 +58,19 @@ class PayphonePaymentProcessor extends AbstractPaymentProcessor {
     paymentSessionData: Record<string, unknown>
   ): Promise<Record<string, unknown> | PaymentProcessorError> {
     // TODO: generate a new payment request
-    const api = new SaleApi();
-    api.setApiKey(SaleApiApiKeys.Authorization, this.apiKey);
+    const api = new SaleApi(new Configuration({ apiKey: this.apiKey }));
 
     const res = await api.saleSet({
-      amount: (paymentSessionData.amount as number) * 1000,
-      clientTransactionId: paymentSessionData.clientTransactionId as string,
-      phoneNumber: paymentSessionData.phoneNumber as string,
-      reference: paymentSessionData.reference as string,
-      storeId: this.storeId,
-      currency: "USD",
-      chargeByNickName: false,
-      countryCode: "593",
+      model: {
+        amount: (paymentSessionData.amount as number) * 1000,
+        clientTransactionId: paymentSessionData.clientTransactionId as string,
+        phoneNumber: paymentSessionData.phoneNumber as string,
+        reference: paymentSessionData.reference as string,
+        storeId: this.storeId,
+        currency: "USD",
+        chargeByNickName: false,
+        countryCode: "593",
+      },
     });
 
     return;
@@ -86,24 +83,25 @@ class PayphonePaymentProcessor extends AbstractPaymentProcessor {
     | PaymentProcessorError
     | { status: PaymentSessionStatus; data: Record<string, unknown> }
   > {
-    const api = new SaleApi();
-    api.setApiKey(SaleApiApiKeys.Authorization, this.apiKey);
+    const api = new SaleApi(new Configuration({ apiKey: this.apiKey }));
     try {
       const res = await api.saleSet({
-        amount: (paymentSessionData.amount as number) * 1000,
-        clientTransactionId: paymentSessionData.clientTransactionId as string,
-        phoneNumber: paymentSessionData.phoneNumber as string,
-        reference: paymentSessionData.reference as string,
-        storeId: this.storeId,
-        currency: "USD",
-        chargeByNickName: false,
-        countryCode: "593",
+        model: {
+          amount: (paymentSessionData.amount as number) * 1000,
+          clientTransactionId: paymentSessionData.clientTransactionId as string,
+          phoneNumber: paymentSessionData.phoneNumber as string,
+          reference: paymentSessionData.reference as string,
+          storeId: this.storeId,
+          currency: "USD",
+          chargeByNickName: false,
+          countryCode: "593",
+        },
       });
 
       return {
         status: PaymentSessionStatus.PENDING,
         data: {
-          transactionId: res.body.transactionId,
+          transactionId: res.transactionId,
         },
       };
     } catch (e) {
@@ -120,13 +118,15 @@ class PayphonePaymentProcessor extends AbstractPaymentProcessor {
   async cancelPayment(
     paymentSessionData: Record<string, unknown>
   ): Promise<Record<string, unknown> | PaymentProcessorError> {
-    const api = new CancelApi();
-    api.setApiKey(CancelApiApiKeys.Authorization, this.apiKey);
+    const api = new CancelApi(new Configuration({ apiKey: this.apiKey }));
+
     try {
       const res = await api.cancelSet({
-        id: paymentSessionData.transactionId as number,
+        model: {
+          id: paymentSessionData.transactionId as number,
+        },
       });
-      if (res.body) {
+      if (res) {
         return {
           status: "cancelled",
         };
@@ -154,39 +154,159 @@ class PayphonePaymentProcessor extends AbstractPaymentProcessor {
     // no soportado por payphone
   }
 
-  getPaymentStatus(
+  async getPaymentStatus(
     paymentSessionData: Record<string, unknown>
   ): Promise<PaymentSessionStatus> {
-    throw new Error("Method not implemented.");
-    // TODO: get payment status
+    const api = new SaleApi(new Configuration({ apiKey: this.apiKey }));
+    try {
+      const res = await api.saleGet({
+        id: paymentSessionData.transactionId as number,
+      });
+
+      if (res.statusCode === 3) {
+        return PaymentSessionStatus.AUTHORIZED;
+      }
+
+      if (res.statusCode === 2) {
+        return PaymentSessionStatus.ERROR;
+      }
+
+      this.logger.error(
+        "Transaction status not approved or declined. There was an error somewhere.",
+        res
+      );
+      return PaymentSessionStatus.ERROR;
+    } catch (e) {
+      this.logger.error("Error getting payment status", e);
+      return PaymentSessionStatus.PENDING;
+    }
   }
 
-  refundPayment(
+  async refundPayment(
     paymentSessionData: Record<string, unknown>,
     refundAmount: number
   ): Promise<Record<string, unknown> | PaymentProcessorError> {
-    throw new Error("Method not implemented.");
-    // refund pottentailly exists but it is not documented
+    if (refundAmount !== paymentSessionData.amount) {
+      return {
+        error: "No se puede reembolsar un monto diferente al original",
+        code: "PAYMENT_REFUND_ERROR",
+        detail:
+          "No se puede reembolsar un monto diferente al original con payphone",
+      };
+    }
+    const api = new ReverseApi(new Configuration({ apiKey: this.apiKey }));
+    try {
+      const res = await api.reverseSet({
+        model: {
+          id: paymentSessionData.transactionId as number,
+        },
+      });
+      if (res) {
+        return {
+          status: "refunded",
+        };
+      }
+      return {
+        error: "Error de paypreembolsando el pago",
+        code: "PAYMENT_REFUND_ERROR",
+        detail: "Error reembolsando el pago con payphone",
+      };
+    } catch (e) {
+      this.logger.error("Error refunding payment", e);
+      return {
+        error: "Error reembolsando el pago",
+        code: "PAYMENT_REFUND_ERROR",
+        detail: e.message,
+      };
+    }
   }
 
-  retrievePayment(
+  async retrievePayment(
     paymentSessionData: Record<string, unknown>
   ): Promise<Record<string, unknown> | PaymentProcessorError> {
-    throw new Error("Method not implemented.");
+    const api = new SaleApi(new Configuration({ apiKey: this.apiKey }));
+    try {
+      const res = await api.saleGet({
+        id: paymentSessionData.transactionId as number,
+      });
+
+      return res as Record<string, unknown>;
+    } catch (e) {
+      this.logger.error("Error getting payment status", e);
+      return {
+        error: "Error obteniendo el pago",
+        code: "PAYMENT_RETRIEVAL_ERROR",
+        detail: e.message,
+      };
+    }
   }
 
-  updatePayment(
+  async updatePayment(
     context: PaymentProcessorContext
   ): Promise<void | PaymentProcessorError | PaymentProcessorSessionResponse> {
-    throw new Error("Method not implemented.");
+    if (!context.customer?.phone) {
+      return {
+        error: "No se ha provisto un número de teléfono",
+        code: "MISSING_PHONE_NUMBER",
+        detail:
+          "Es necesario proveer un número de teléfono para realizar el pago con payphone",
+      };
+    }
+
+    return {
+      session_data: {
+        intent: "sale",
+        amount: context.amount,
+        phone: context.customer.phone,
+        reference: context.resource_id, // TODO: set reference
+      },
+      update_requests: {
+        customer_metadata: {
+          payphone: {
+            intent: "sale",
+          },
+        },
+      },
+    };
   }
 
-  updatePaymentData(
+  async updatePaymentData(
     sessionId: string,
     data: Record<string, unknown>
   ): Promise<Record<string, unknown> | PaymentProcessorError> {
-    throw new Error("Method not implemented.");
+    try {
+      // Prevent from updating the amount from here as it should go through
+      // the updatePayment method to perform the correct logic
+      if (data.amount) {
+        throw new MedusaError(
+          MedusaError.Types.INVALID_DATA,
+          "Cannot update amount, use updatePayment instead"
+        );
+      }
+
+      if (data.clientTransactionId) {
+        throw new MedusaError(
+          MedusaError.Types.INVALID_DATA,
+          "Cannot update clientTransactionId as it is immutable"
+        );
+      }
+
+      if (data.transactionId) {
+        throw new MedusaError(
+          MedusaError.Types.INVALID_DATA,
+          "Cannot update transactionId as it is immutable"
+        );
+      }
+      return data;
+    } catch (e) {
+      this.logger.error("Error updating payment session data", e);
+      return {
+        error: "Error updating payment session data",
+        code: "PAYMENT_UPDATE_ERROR",
+        detail: e.message,
+      };
+    }
   }
 }
 
-export default PayphonePaymentProcessor;
+export default PayphonePaymentService;
