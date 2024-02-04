@@ -1,19 +1,23 @@
 {
   "compilerOptions": {
-    "strict": true,
-    /* Basic Options */
-    "target": "ES2022",
+    "target": "es2019",
+    "allowJs": true,
     "esModuleInterop": true,
-    "moduleResolution": "Node16",
-    "declaration": true,
-    "module": "Node16",
-    "removeComments": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "skipLibCheck": true,
-    "inlineSourceMap": true,
-    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true,
+    "declaration": true,
+    "sourceMap": false,
     "outDir": "./dist",
-    "lib": ["ES2023"]
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "checkJs": false
   },
-  "exclude": ["dist", "node_modules"],
+  "exclude": ["node_modules", "dist"],
   "filesGlob": ["./**/*.ts"]
 }
