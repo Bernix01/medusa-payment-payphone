@@ -22,3 +22,7 @@ uploads
 tsconfig.**
 .vscode
 .github
+*.md
+/*.ts
+.openapi-*
+*.sh
