@@ -1,6 +1,6 @@
 {
   "name": "medusa-payment-payphone",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Payphone payment provider",
   "author": "bernix01 <gbernal096@gmail.com>",
   "license": "MIT",
@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "@medusajs/admin": "7.1.10",
-    "axios": "^1.6.7"
+    "@paralleldrive/cuid2": "^2.2.2",
+    "nanoid": "^5.0.5"
   },
   "devDependencies": {
     "@medusajs/medusa": "^1.20.1",

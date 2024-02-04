@@ -7,21 +7,60 @@ import {
   PaymentProcessorSessionResponse,
   PaymentSessionStatus,
 } from "@medusajs/medusa";
-import { CancelApi, ReverseApi, SaleApi } from "../lib/payphone/apis";
-import { Configuration } from "../lib/payphone/runtime";
 import { MedusaError } from "medusa-core-utils";
+import { nanoid } from "nanoid";
+import {
+  ApiException,
+  AuthorizationAuthentication,
+  CancelApi,
+  LinksApi,
+  PayPhonePaymentButtonModelsLinkViewModel,
+  ReverseApi,
+  SaleApi,
+  createConfiguration,
+} from "../lib/payphone";
 
 class PayphonePaymentService extends AbstractPaymentProcessor {
   protected readonly logger: Logger;
   protected readonly apiKey: string;
   protected readonly storeId: string;
   protected readonly cartService: CartService;
+  protected readonly saleApi: SaleApi;
+  protected readonly cancelApi: CancelApi;
+  protected readonly linksApi: LinksApi;
+  private readonly reverseApi: ReverseApi;
 
   static identifier = "payphone";
 
   constructor(container, options) {
     super(container, options);
     this.logger = container.logger;
+    // this.apiKey = process.env.PAYPHONE_TOKEN;
+    // this.storeId = process.env.PAYPHONE_STORE_ID;
+    this.saleApi = new SaleApi(
+      createConfiguration({
+        authMethods: {
+          default: new AuthorizationAuthentication(`Bearer ${this.apiKey}`),
+        },
+      })
+    );
+    this.cancelApi = new CancelApi(
+      createConfiguration({
+        authMethods: { Authorization: `Bearer ${this.apiKey}` },
+      })
+    );
+    this.reverseApi = new ReverseApi(
+      createConfiguration({
+        authMethods: { Authorization: `Bearer ${this.apiKey}` },
+      })
+    );
+    this.linksApi = new LinksApi(
+      createConfiguration({
+        authMethods: {
+          default: new AuthorizationAuthentication(`Bearer ${this.apiKey}`),
+        },
+      })
+    );
     this.apiKey = options.apiKey;
     this.storeId = options.storeId;
     this.cartService = container.cartService;
@@ -32,11 +71,11 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
   ): Promise<PaymentProcessorError | PaymentProcessorSessionResponse> {
     const cartId = context.resource_id;
     const cart = await this.cartService.retrieve(cartId, {
-      relations: ["customer"],
+      relations: ["customer", "billing_address"],
     });
-
-    if (!cart.billing_address.phone && !context.customer?.phone) {
+    if (!cart.billing_address?.phone && !context.customer?.phone) {
       this.logger.error("No phone number provided", context);
+      this.logger.error("No phone number resolved", cart);
       return {
         error: "No se ha provisto un número de teléfono",
         code: "MISSING_PHONE_NUMBER",
@@ -49,8 +88,9 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
       session_data: {
         intent: "sale",
         amount: context.amount,
-        phone: context.customer.phone || cart.billing_address.phone,
+        phone: cart.billing_address.phone || cart.customer.phone,
         reference: context.resource_id,
+        clientTransactionId: nanoid(15),
       },
       update_requests: {
         customer_metadata: {
@@ -66,19 +106,16 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
     paymentSessionData: Record<string, unknown>
   ): Promise<Record<string, unknown> | PaymentProcessorError> {
     // TODO: generate a new payment request
-    const api = new SaleApi(new Configuration({ apiKey: this.apiKey }));
 
-    const res = await api.saleSet({
-      model: {
-        amount: (paymentSessionData.amount as number) * 1000,
-        clientTransactionId: paymentSessionData.clientTransactionId as string,
-        phoneNumber: paymentSessionData.phoneNumber as string,
-        reference: paymentSessionData.reference as string,
-        storeId: this.storeId,
-        currency: "USD",
-        chargeByNickName: false,
-        countryCode: "593",
-      },
+    const res = await this.saleApi.saleSet({
+      amount: (paymentSessionData.amount as number) * 1000,
+      clientTransactionId: paymentSessionData.clientTransactionId as string,
+      phoneNumber: paymentSessionData.phoneNumber as string,
+      reference: paymentSessionData.reference as string,
+      storeId: this.storeId,
+      currency: "USD",
+      chargeByNickName: false,
+      countryCode: "593",
     });
 
     return;
@@ -91,48 +128,120 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
     | PaymentProcessorError
     | { status: PaymentSessionStatus; data: Record<string, unknown> }
   > {
-    const api = new SaleApi(new Configuration({ apiKey: this.apiKey }));
+    const cart = await this.cartService.retrieveWithTotals(
+      context.cart_id as string,
+      {
+        relations: ["customer", "billing_address", "payment"],
+      }
+    );
+
     try {
-      const res = await api.saleSet({
-        model: {
-          amount: (paymentSessionData.amount as number) * 1000,
-          clientTransactionId: paymentSessionData.clientTransactionId as string,
-          phoneNumber: paymentSessionData.phoneNumber as string,
-          reference: paymentSessionData.reference as string,
-          storeId: this.storeId,
-          currency: "USD",
-          chargeByNickName: false,
-          countryCode: "593",
-        },
-      });
+      const createPaymentPayload: PayPhonePaymentButtonModelsLinkViewModel = {
+        amount: cart.total,
+        expireIn: 1,
+        isAmountEditable: false,
+        isMassive: false,
+        oneTime: true,
+        storeId: this.storeId,
+        currency: "usd",
+        amountWithTax: cart.subtotal + cart.shipping_total,
+        tax: cart.tax_total,
+        clientTransactionId: paymentSessionData.clientTransactionId as string,
+        reference: paymentSessionData.reference as string,
+        additionalData: JSON.stringify({
+          foo: "bar",
+        }),
+        // storeId: this.storeId,
+        // clientUserId: cart.customer_id,
+        // currency: "USD",
+        // email: cart.email,
+        // chargeByNickName: false,
+        // order: {
+        //   billTo: {
+        //     firstName: cart.billing_address.first_name,
+        //     lastName: cart.billing_address.last_name,
+        //     address1: cart.billing_address.address_1,
+        //     country: cart.billing_address.country.display_name,
+        //     state: cart.billing_address.province,
+        //     postalCode: cart.billing_address.postal_code,
+        //     email: cart.email,
+        //     address2: cart.billing_address.address_2,
+        //     locality: cart.billing_address.city,
+        //     phoneNumber: cart.billing_address.phone,
+        //   },
+        //   lineItems: cart.items.map<PayPhoneButtonBusinessModelsLineItem>(
+        //     (item) => {
+        //       return {
+        //         name: item.title,
+        //         quantity: item.quantity,
+        //         unitPrice: item.unit_price,
+        //         taxAmount: item.tax_total,
+        //         productDescription: item.description,
+        //         productSKU: item.variant.sku,
+        //         totalAmount: item.total,
+        //       };
+        //     }
+        //   ),
+        // },
+        // optionalParameter1: "",
+        // optionalParameter2: "",
+        // optionalParameter3: "",
+      };
+      this.logger.error("Creating payment with cart", cart);
+      this.logger.error("Creating payment with payload", createPaymentPayload);
+      const res = await this.linksApi.linksPost(createPaymentPayload);
 
       return {
-        status: PaymentSessionStatus.PENDING,
+        status: PaymentSessionStatus.REQUIRES_MORE,
         data: {
-          transactionId: res.transactionId,
+          paymentUrl: res,
         },
       };
     } catch (e) {
       this.logger.error(e);
+      if (e instanceof ApiException) {
+        if (e.code === 400) {
+          return {
+            error: e.name,
+            code: `PAYMENT_AUTHORIZATION_ERROR_${e.body.Code}`,
+            detail: `Payphone no pudo procesar la solicitud: ${e.message}\n\t${e.body.Message})}`,
+          };
+        }
 
-      return {
-        error: "Error autorizando el pago",
-        code: "PAYMENT_AUTHORIZATION_ERROR",
-        detail: "Error autorizando el pago con payphone",
-      };
+        //   {
+        //     "message": "La transacción no pudo ser creada por favor inténtelo de nuevo",
+        //     "errorCode": 22,
+        //     "errors": [
+        //         {
+        //             "message": "El cliente tiene transacciones pendientes con su local",
+        //             "errorCode": 2061
+        //         }
+        //     ]
+        // }
+
+        return {
+          error: "Fallo la creación del pago",
+          code: "PAYMENT_AUTHORIZATION_ERROR",
+          detail: "Payphone no pudo procesar la solicitud",
+        };
+      }
     }
   }
 
   async cancelPayment(
     paymentSessionData: Record<string, unknown>
   ): Promise<Record<string, unknown> | PaymentProcessorError> {
-    const api = new CancelApi(new Configuration({ apiKey: this.apiKey }));
+    if (!paymentSessionData.transactionId) {
+      return {
+        error: "No transaction id",
+        code: "PAYMENT_RETRIEVAL_ERROR",
+        detail: "No transaction id in session data",
+      };
+    }
 
     try {
-      const res = await api.cancelSet({
-        model: {
-          id: paymentSessionData.transactionId as number,
-        },
+      const res = await this.cancelApi.cancelSet({
+        id: paymentSessionData.transactionId as number,
       });
       if (res) {
         return {
@@ -155,21 +264,24 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
     }
   }
 
-  deletePayment(
+  async deletePayment(
     paymentSessionData: Record<string, unknown>
   ): Promise<Record<string, unknown> | PaymentProcessorError> {
-    throw new Error("Method not implemented.");
-    // no soportado por payphone
+    // no need to delete a payment in payphone
+    return { status: "deleted" };
   }
 
   async getPaymentStatus(
     paymentSessionData: Record<string, unknown>
   ): Promise<PaymentSessionStatus> {
-    const api = new SaleApi(new Configuration({ apiKey: this.apiKey }));
     try {
-      const res = await api.saleGet({
-        id: paymentSessionData.transactionId as number,
-      });
+      if (!paymentSessionData.transactionId) {
+        return PaymentSessionStatus.REQUIRES_MORE;
+      }
+
+      const res = await this.saleApi.saleGet(
+        paymentSessionData.transactionId as number
+      );
 
       if (res.statusCode === 3) {
         return PaymentSessionStatus.AUTHORIZED;
@@ -186,7 +298,7 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
       return PaymentSessionStatus.ERROR;
     } catch (e) {
       this.logger.error("Error getting payment status", e);
-      return PaymentSessionStatus.PENDING;
+      return PaymentSessionStatus.REQUIRES_MORE;
     }
   }
 
@@ -202,12 +314,19 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
           "No se puede reembolsar un monto diferente al original con payphone",
       };
     }
-    const api = new ReverseApi(new Configuration({ apiKey: this.apiKey }));
+
+    if (!paymentSessionData.transactionId) {
+      return {
+        error: "Sin id de transacción.",
+        code: "PAYMENT_REFUND_ERROR",
+        detail:
+          "No se puede reembolsar un pago sin un id de transacción con payphone",
+      };
+    }
+
     try {
-      const res = await api.reverseSet({
-        model: {
-          id: paymentSessionData.transactionId as number,
-        },
+      const res = await this.reverseApi.reverseSet({
+        id: paymentSessionData.transactionId as number,
       });
       if (res) {
         return {
@@ -232,11 +351,18 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
   async retrievePayment(
     paymentSessionData: Record<string, unknown>
   ): Promise<Record<string, unknown> | PaymentProcessorError> {
-    const api = new SaleApi(new Configuration({ apiKey: this.apiKey }));
+    if (!paymentSessionData.transactionId) {
+      return {
+        error: "No transaction id",
+        code: "PAYMENT_RETRIEVAL_ERROR",
+        detail: "No transaction id in session data",
+      };
+    }
+
     try {
-      const res = await api.saleGet({
-        id: paymentSessionData.transactionId as number,
-      });
+      const res = await this.saleApi.saleGet(
+        paymentSessionData.transactionId as number
+      );
 
       return res as Record<string, unknown>;
     } catch (e) {
@@ -252,7 +378,13 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
   async updatePayment(
     context: PaymentProcessorContext
   ): Promise<void | PaymentProcessorError | PaymentProcessorSessionResponse> {
-    if (!context.customer?.phone) {
+    const cartId = context.resource_id;
+    const cart = await this.cartService.retrieve(cartId, {
+      relations: ["customer", "billing_address"],
+    });
+    if (!cart.billing_address?.phone && !context.customer?.phone) {
+      this.logger.error("No phone number provided", context);
+      this.logger.error("No phone number resolved", cart);
       return {
         error: "No se ha provisto un número de teléfono",
         code: "MISSING_PHONE_NUMBER",
@@ -265,8 +397,10 @@ class PayphonePaymentService extends AbstractPaymentProcessor {
       session_data: {
         intent: "sale",
         amount: context.amount,
-        phone: context.customer.phone,
+        phone: cart.billing_address.phone || cart.customer.phone,
         reference: context.resource_id, // TODO: set reference
+        clientTransactionId:
+          context.paymentSessionData.clientTransactionId || nanoid(15),
       },
       update_requests: {
         customer_metadata: {
