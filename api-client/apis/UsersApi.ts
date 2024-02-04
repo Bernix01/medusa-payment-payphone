@@ -2,7 +2,7 @@
 import {BaseAPIRequestFactory, RequiredError, COLLECTION_FORMATS} from './baseapi';
 import {Configuration} from '../configuration';
 import {RequestContext, HttpMethod, ResponseContext, HttpFile, HttpInfo} from '../http/http';
-import * as FormData from "form-data";
+import  FormData from "form-data";
 import { URLSearchParams } from 'url';
 import {ObjectSerializer} from '../models/ObjectSerializer';
 import {ApiException} from './exception';
@@ -10,31 +10,37 @@ import {canConsumeForm, isCodeInRange} from '../util';
 import {SecurityAuthentication} from '../auth/auth';
 
 
-import { PayPhoneButtonBusinessModelsSaleGetModel } from '../models/PayPhoneButtonBusinessModelsSaleGetModel';
-import { PayPhoneButtonBusinessModelsSaleModel } from '../models/PayPhoneButtonBusinessModelsSaleModel';
-import { PayPhoneButtonBusinessViewModelsSaleRequestModel } from '../models/PayPhoneButtonBusinessViewModelsSaleRequestModel';
+import { PayPhoneButtonBusinessModelsUserModel } from '../models/PayPhoneButtonBusinessModelsUserModel';
 
 /**
  * no description
  */
-export class SaleApiRequestFactory extends BaseAPIRequestFactory {
+export class UsersApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
-     * Get transaction by id
-     * @param id Transaction identifier
+     * Check active users
+     * @param number Phone number
+     * @param prefix Country code prefix
      */
-    public async saleGet(id: number, _options?: Configuration): Promise<RequestContext> {
+    public async usersCheckUser(number: string, prefix: number, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new RequiredError("SaleApi", "saleGet", "id");
+        // verify required parameter 'number' is not null or undefined
+        if (number === null || number === undefined) {
+            throw new RequiredError("UsersApi", "usersCheckUser", "number");
+        }
+
+
+        // verify required parameter 'prefix' is not null or undefined
+        if (prefix === null || prefix === undefined) {
+            throw new RequiredError("UsersApi", "usersCheckUser", "prefix");
         }
 
 
         // Path Params
-        const localVarPath = '/api/Sale/{id}'
-            .replace('{' + 'id' + '}', encodeURIComponent(String(id)));
+        const localVarPath = '/api/Users/check/{number}/region/{prefix}'
+            .replace('{' + 'number' + '}', encodeURIComponent(String(number)))
+            .replace('{' + 'prefix' + '}', encodeURIComponent(String(prefix)));
 
         // Make Request Context
         const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
@@ -51,21 +57,29 @@ export class SaleApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
-     * Get transaction by client transaction id
-     * @param clientId Client transaction id
+     * Get user by phone number
+     * @param number Phone number
+     * @param prefix Country code prefix
      */
-    public async saleGetByClient(clientId: string, _options?: Configuration): Promise<RequestContext> {
+    public async usersGet(number: string, prefix: number, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
-        // verify required parameter 'clientId' is not null or undefined
-        if (clientId === null || clientId === undefined) {
-            throw new RequiredError("SaleApi", "saleGetByClient", "clientId");
+        // verify required parameter 'number' is not null or undefined
+        if (number === null || number === undefined) {
+            throw new RequiredError("UsersApi", "usersGet", "number");
+        }
+
+
+        // verify required parameter 'prefix' is not null or undefined
+        if (prefix === null || prefix === undefined) {
+            throw new RequiredError("UsersApi", "usersGet", "prefix");
         }
 
 
         // Path Params
-        const localVarPath = '/api/Sale/client/{clientId}'
-            .replace('{' + 'clientId' + '}', encodeURIComponent(String(clientId)));
+        const localVarPath = '/api/Users/{number}/region/{prefix}'
+            .replace('{' + 'number' + '}', encodeURIComponent(String(number)))
+            .replace('{' + 'prefix' + '}', encodeURIComponent(String(prefix)));
 
         // Make Request Context
         const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
@@ -82,44 +96,34 @@ export class SaleApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
-     * Create transaction and send notification to customer
-     * @param model &lt;seealso cref&#x3D;\&quot;T:PayPhone.Button.Business.ViewModels.SaleRequestModel\&quot; /&gt;
+     * Get user by nickname
+     * @param number Nickname
+     * @param prefix Country phone prefix
      */
-    public async saleSet(model: PayPhoneButtonBusinessViewModelsSaleRequestModel, _options?: Configuration): Promise<RequestContext> {
+    public async usersGetByNickname(number: string, prefix: number, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
-        // verify required parameter 'model' is not null or undefined
-        if (model === null || model === undefined) {
-            throw new RequiredError("SaleApi", "saleSet", "model");
+        // verify required parameter 'number' is not null or undefined
+        if (number === null || number === undefined) {
+            throw new RequiredError("UsersApi", "usersGetByNickname", "number");
+        }
+
+
+        // verify required parameter 'prefix' is not null or undefined
+        if (prefix === null || prefix === undefined) {
+            throw new RequiredError("UsersApi", "usersGetByNickname", "prefix");
         }
 
 
         // Path Params
-        const localVarPath = '/api/Sale';
+        const localVarPath = '/api/Users/nickname/{number}/region/{prefix}'
+            .replace('{' + 'number' + '}', encodeURIComponent(String(number)))
+            .replace('{' + 'prefix' + '}', encodeURIComponent(String(prefix)));
 
         // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
         requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
-
-        // Body Params
-        const contentType = ObjectSerializer.getPreferredMediaType([
-            "application/json",
-        
-            "text/json",
-        
-            "application/xml",
-        
-            "text/xml",
-        
-            "application/x-www-form-urlencoded"
-        ]);
-        requestContext.setHeaderParam("Content-Type", contentType);
-        const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(model, "PayPhoneButtonBusinessViewModelsSaleRequestModel", ""),
-            contentType
-        );
-        requestContext.setBody(serializedBody);
 
         
         const defaultAuth: SecurityAuthentication | undefined = _options?.authMethods?.default || this.configuration?.authMethods?.default
@@ -132,31 +136,31 @@ export class SaleApiRequestFactory extends BaseAPIRequestFactory {
 
 }
 
-export class SaleApiResponseProcessor {
+export class UsersApiResponseProcessor {
 
     /**
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to saleGet
+     * @params response Response returned by the server for a request to usersCheckUser
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async saleGetWithHttpInfo(response: ResponseContext): Promise<HttpInfo<PayPhoneButtonBusinessModelsSaleGetModel >> {
+     public async usersCheckUserWithHttpInfo(response: ResponseContext): Promise<HttpInfo<boolean >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: PayPhoneButtonBusinessModelsSaleGetModel = ObjectSerializer.deserialize(
+            const body: boolean = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "PayPhoneButtonBusinessModelsSaleGetModel", ""
-            ) as PayPhoneButtonBusinessModelsSaleGetModel;
+                "boolean", ""
+            ) as boolean;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: PayPhoneButtonBusinessModelsSaleGetModel = ObjectSerializer.deserialize(
+            const body: boolean = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "PayPhoneButtonBusinessModelsSaleGetModel", ""
-            ) as PayPhoneButtonBusinessModelsSaleGetModel;
+                "boolean", ""
+            ) as boolean;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -167,25 +171,25 @@ export class SaleApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to saleGetByClient
+     * @params response Response returned by the server for a request to usersGet
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async saleGetByClientWithHttpInfo(response: ResponseContext): Promise<HttpInfo<Array<PayPhoneButtonBusinessModelsSaleGetModel> >> {
+     public async usersGetWithHttpInfo(response: ResponseContext): Promise<HttpInfo<PayPhoneButtonBusinessModelsUserModel >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: Array<PayPhoneButtonBusinessModelsSaleGetModel> = ObjectSerializer.deserialize(
+            const body: PayPhoneButtonBusinessModelsUserModel = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "Array<PayPhoneButtonBusinessModelsSaleGetModel>", ""
-            ) as Array<PayPhoneButtonBusinessModelsSaleGetModel>;
+                "PayPhoneButtonBusinessModelsUserModel", ""
+            ) as PayPhoneButtonBusinessModelsUserModel;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: Array<PayPhoneButtonBusinessModelsSaleGetModel> = ObjectSerializer.deserialize(
+            const body: PayPhoneButtonBusinessModelsUserModel = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "Array<PayPhoneButtonBusinessModelsSaleGetModel>", ""
-            ) as Array<PayPhoneButtonBusinessModelsSaleGetModel>;
+                "PayPhoneButtonBusinessModelsUserModel", ""
+            ) as PayPhoneButtonBusinessModelsUserModel;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -196,25 +200,25 @@ export class SaleApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to saleSet
+     * @params response Response returned by the server for a request to usersGetByNickname
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async saleSetWithHttpInfo(response: ResponseContext): Promise<HttpInfo<PayPhoneButtonBusinessModelsSaleModel >> {
+     public async usersGetByNicknameWithHttpInfo(response: ResponseContext): Promise<HttpInfo<PayPhoneButtonBusinessModelsUserModel >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: PayPhoneButtonBusinessModelsSaleModel = ObjectSerializer.deserialize(
+            const body: PayPhoneButtonBusinessModelsUserModel = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "PayPhoneButtonBusinessModelsSaleModel", ""
-            ) as PayPhoneButtonBusinessModelsSaleModel;
+                "PayPhoneButtonBusinessModelsUserModel", ""
+            ) as PayPhoneButtonBusinessModelsUserModel;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: PayPhoneButtonBusinessModelsSaleModel = ObjectSerializer.deserialize(
+            const body: PayPhoneButtonBusinessModelsUserModel = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "PayPhoneButtonBusinessModelsSaleModel", ""
-            ) as PayPhoneButtonBusinessModelsSaleModel;
+                "PayPhoneButtonBusinessModelsUserModel", ""
+            ) as PayPhoneButtonBusinessModelsUserModel;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 

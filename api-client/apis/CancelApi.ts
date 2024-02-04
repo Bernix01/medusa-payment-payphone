@@ -2,7 +2,7 @@
 import {BaseAPIRequestFactory, RequiredError, COLLECTION_FORMATS} from './baseapi';
 import {Configuration} from '../configuration';
 import {RequestContext, HttpMethod, ResponseContext, HttpFile, HttpInfo} from '../http/http';
-import * as FormData from "form-data";
+import  FormData from "form-data";
 import { URLSearchParams } from 'url';
 import {ObjectSerializer} from '../models/ObjectSerializer';
 import {ApiException} from './exception';
@@ -10,31 +10,29 @@ import {canConsumeForm, isCodeInRange} from '../util';
 import {SecurityAuthentication} from '../auth/auth';
 
 
-import { PayPhoneButtonBusinessModelsPrepareSaleModel } from '../models/PayPhoneButtonBusinessModelsPrepareSaleModel';
-import { PayPhoneButtonBusinessModelsPrepareSaleRequestModel } from '../models/PayPhoneButtonBusinessModelsPrepareSaleRequestModel';
-import { PayPhoneButtonBusinessModelsSaleGetModelB } from '../models/PayPhoneButtonBusinessModelsSaleGetModelB';
-import { PayPhonePaymentButtonModelsConfirmSaleRequestModel } from '../models/PayPhonePaymentButtonModelsConfirmSaleRequestModel';
+import { PayPhonePaymentButtonModelsCancellationSetByClientRequestModel } from '../models/PayPhonePaymentButtonModelsCancellationSetByClientRequestModel';
+import { PayPhonePaymentButtonModelsCancellationSetRequestModel } from '../models/PayPhonePaymentButtonModelsCancellationSetRequestModel';
 
 /**
  * no description
  */
-export class ButtonApiRequestFactory extends BaseAPIRequestFactory {
+export class CancelApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
-     * Post: Confirm the transaction receive from payment button
-     * @param model 
+     * POST: Request cancel transaction
+     * @param model &lt;seealso cref&#x3D;\&quot;T:PayPhone.PaymentButton.Models.CancellationSetRequestModel\&quot; /&gt;
      */
-    public async buttonConfirmV2(model: PayPhonePaymentButtonModelsConfirmSaleRequestModel, _options?: Configuration): Promise<RequestContext> {
+    public async cancelSet(model: PayPhonePaymentButtonModelsCancellationSetRequestModel, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'model' is not null or undefined
         if (model === null || model === undefined) {
-            throw new RequiredError("ButtonApi", "buttonConfirmV2", "model");
+            throw new RequiredError("CancelApi", "cancelSet", "model");
         }
 
 
         // Path Params
-        const localVarPath = '/api/button/V2/Confirm';
+        const localVarPath = '/api/Cancel';
 
         // Make Request Context
         const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
@@ -55,7 +53,7 @@ export class ButtonApiRequestFactory extends BaseAPIRequestFactory {
         ]);
         requestContext.setHeaderParam("Content-Type", contentType);
         const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(model, "PayPhonePaymentButtonModelsConfirmSaleRequestModel", ""),
+            ObjectSerializer.serialize(model, "PayPhonePaymentButtonModelsCancellationSetRequestModel", ""),
             contentType
         );
         requestContext.setBody(serializedBody);
@@ -70,20 +68,20 @@ export class ButtonApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
-     * POST: Prepare the transaction for consume later by payment button
-     * @param model 
+     * POST: Request cancel transaction by client transaction id
+     * @param model &lt;seealso cref&#x3D;\&quot;T:PayPhone.PaymentButton.Models.CancellationSetByClientRequestModel\&quot; /&gt;
      */
-    public async buttonPrepare(model: PayPhoneButtonBusinessModelsPrepareSaleRequestModel, _options?: Configuration): Promise<RequestContext> {
+    public async cancelSetByClient(model: PayPhonePaymentButtonModelsCancellationSetByClientRequestModel, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'model' is not null or undefined
         if (model === null || model === undefined) {
-            throw new RequiredError("ButtonApi", "buttonPrepare", "model");
+            throw new RequiredError("CancelApi", "cancelSetByClient", "model");
         }
 
 
         // Path Params
-        const localVarPath = '/api/button/Prepare';
+        const localVarPath = '/api/Cancel/client';
 
         // Make Request Context
         const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
@@ -104,7 +102,7 @@ export class ButtonApiRequestFactory extends BaseAPIRequestFactory {
         ]);
         requestContext.setHeaderParam("Content-Type", contentType);
         const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(model, "PayPhoneButtonBusinessModelsPrepareSaleRequestModel", ""),
+            ObjectSerializer.serialize(model, "PayPhonePaymentButtonModelsCancellationSetByClientRequestModel", ""),
             contentType
         );
         requestContext.setBody(serializedBody);
@@ -120,31 +118,31 @@ export class ButtonApiRequestFactory extends BaseAPIRequestFactory {
 
 }
 
-export class ButtonApiResponseProcessor {
+export class CancelApiResponseProcessor {
 
     /**
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to buttonConfirmV2
+     * @params response Response returned by the server for a request to cancelSet
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async buttonConfirmV2WithHttpInfo(response: ResponseContext): Promise<HttpInfo<PayPhoneButtonBusinessModelsSaleGetModelB >> {
+     public async cancelSetWithHttpInfo(response: ResponseContext): Promise<HttpInfo<boolean >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: PayPhoneButtonBusinessModelsSaleGetModelB = ObjectSerializer.deserialize(
+            const body: boolean = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "PayPhoneButtonBusinessModelsSaleGetModelB", ""
-            ) as PayPhoneButtonBusinessModelsSaleGetModelB;
+                "boolean", ""
+            ) as boolean;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: PayPhoneButtonBusinessModelsSaleGetModelB = ObjectSerializer.deserialize(
+            const body: boolean = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "PayPhoneButtonBusinessModelsSaleGetModelB", ""
-            ) as PayPhoneButtonBusinessModelsSaleGetModelB;
+                "boolean", ""
+            ) as boolean;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -155,25 +153,25 @@ export class ButtonApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to buttonPrepare
+     * @params response Response returned by the server for a request to cancelSetByClient
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async buttonPrepareWithHttpInfo(response: ResponseContext): Promise<HttpInfo<PayPhoneButtonBusinessModelsPrepareSaleModel >> {
+     public async cancelSetByClientWithHttpInfo(response: ResponseContext): Promise<HttpInfo<boolean >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: PayPhoneButtonBusinessModelsPrepareSaleModel = ObjectSerializer.deserialize(
+            const body: boolean = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "PayPhoneButtonBusinessModelsPrepareSaleModel", ""
-            ) as PayPhoneButtonBusinessModelsPrepareSaleModel;
+                "boolean", ""
+            ) as boolean;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: PayPhoneButtonBusinessModelsPrepareSaleModel = ObjectSerializer.deserialize(
+            const body: boolean = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "PayPhoneButtonBusinessModelsPrepareSaleModel", ""
-            ) as PayPhoneButtonBusinessModelsPrepareSaleModel;
+                "boolean", ""
+            ) as boolean;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
