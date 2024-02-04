@@ -1,21 +1,27 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/plugin"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     allow:
       - dependency-type: production
     groups:
       medusa:
         patterns:
-        - "@medusajs*"
-        - "medusa*"
+          - "@medusajs*"
+          - "medusa*"
         update-types:
-        - "minor"
-        - "patch"
+          - "minor"
+          - "patch"
     ignore:
       - dependency-name: "@medusajs*"
         update-types: ["version-update:semver-major"]
       - dependency-name: "medusa*"
         update-types: ["version-update:semver-major"]
+  - package-ecosystem: "npm"
+    directory: "/api-client"
+    schedule:
+      interval: "monthly"
+    allow:
+      - dependency-type: production
