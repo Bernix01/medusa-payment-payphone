@@ -1,6 +1,6 @@
 {
   "name": "payphone-api-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "OpenAPI client for Payphone Generated with OpenAPI Generator",
   "author": "bernix01 <gbernal096@gmail.com",
   "repository": {
@@ -24,9 +24,10 @@
     "build": "tsc",
     "prepare": "npm run build"
   },
+  "engines": {
+    "node": ">=21"
+  },
   "dependencies": {
-    "node-fetch": "^2.6.0",
-    "@types/node-fetch": "^2.5.7",
     "@types/node": "*",
     "form-data": "^2.5.0",
     "es6-promise": "^4.2.4",
